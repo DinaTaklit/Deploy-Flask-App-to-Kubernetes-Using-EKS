@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "7bab2e77-4c24-4dd3-b73f-6e70ad0c6096",
+		"name": "Deploy-Flask-App-to-Kubernetes-Using-EKS-master.postman_collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": "GET '/': This is a simple health check, which returns the response 'Healthy'."
+			},
+			"response": []
+		},
+		{
+			"name": "/auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"<EMAIL>\",\n\t\"password\":\"<PASSWORD>\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{host}}/auth",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/contents",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1OTE0ODc3ODAsIm5iZiI6MTU5MDI3ODE4MCwiZW1haWwiOiI8RU1BSUw-In0.sTLaO-ixfsBnW7f4l-j6S1IluuKNh7FFVlZKk_sB3WM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/contents",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"contents"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "b33fafb0-d52d-4a59-a7e2-a418748a4b52",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "e43e0a60-67c0-4299-9ad0-cae0ff03a213",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "86471bf5-dab6-4f81-aab6-8055879acb77",
+			"key": "host",
+			"value": "a59393386ee1045ce954b0b35f0f43ca-1400047211.us-west-2.elb.amazonaws.com",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
