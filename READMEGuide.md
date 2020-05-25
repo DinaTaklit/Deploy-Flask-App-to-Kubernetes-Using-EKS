@@ -33,7 +33,7 @@ The following steps describe how to run the Flask API locally with the standard 
 >
 >Check if the variable was really created by runing `echo $JWT_SECRET` you should see `myjwtsecret`if you did not meas the variable is not created.
 >
-> It is alwyas a good practive to check if your vars 
+> It is alwyas a good practive to check if your vars
 
 3- Run the app using the Flask server, from the top directory, run:
 
@@ -45,5 +45,66 @@ python main.py
 And check the 03 end points :).
 
 ### Concept Checklist
+
 - [x]  I have run the project Flask API locally.
-- [x] I have tested the endpoints of the running Flask application.   
+- [x] I have tested the endpoints of the running Flask application.
+
+## 2. Containerizing and Running Locally
+
+## 3. CD Pipeline
+
+The next step of the project will be:
+
+- Create an EKS cluster
+- Set a secret using AWS parameter store
+- Create a pipeline watching for commits to your Github repository
+- Build and deploy your image using CodeBuild
+
+### 3.1 Create an EKS Cluster and IAM Role
+
+> We will start by creating IAM role first. We will create the clusters only once we need them to avoid extra billing.
+
+#### 3.1.1 Set Up an IAM Role for the Cluster
+
+The next steps are provided to quickly set up an IAM role for your cluster.
+
+2. Create an IAM role that CodeBuild can use to interact with EKS
+
+- Set an environment variable ACCOUNT_ID to the value of your AWS account id. You can do this with awscli:
+  
+```sh
+ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+```
+
+- Create a role policy document that allows the actions "eks:Describe*" and "ssm:GetParameters". You can do this by setting an environment variable with the role policy:
+  
+```sh
+ TRUST="{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Effect\": \"Allow\", \"Principal\": { \"AWS\": \"arn:aws:iam::${ACCOUNT_ID}:root\" }, \"Action\": \"sts:AssumeRole\" } ] }"
+ ```
+
+> Ps: Check if the var was created
+
+```sh
+ echo $TRUST
+```
+
+- Create a role named 'UdacityFlaskDeployCBKubectlRole' using the role policy document
+
+```sh
+EKS_DESCRIBE="{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Effect\": \"Allow\", \"Action\": [ \"eks:Describe*\", \"ssm:GetParameters*\" ], \"Resource\": \"*\" } ] }"
+```
+
+> Check if EKS_DESCRIBE was really created by running this command `echo $EKS_DESCRIBE`
+
+```sh
+$ echo $EKS_DESCRIBE
+{ "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Action": [ "eks:Describe*", "ssm:GetParameters*" ], "Resource": "*" } ] }
+```
+
+- Attach the policy to the 'UdacityFlaskDeployCBKubectlRole'
+
+```sh
+aws iam put-role-policy --role-name UdacityFlaskDeployCBKubectlRole --policy-name eks-describe --policy-document "$EKS_DESCRIBE"
+```
+
+=> You have now created a role named 'UdacityFlaskDeployCBKubectlRole'
