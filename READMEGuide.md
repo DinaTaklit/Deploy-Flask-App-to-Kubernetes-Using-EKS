@@ -8,7 +8,7 @@ Here is a simple guid to success this project cotaining tips to avoid issues and
 
 The following steps describe how to run the Flask API locally with the standard Flask server, so that you can test endpoints before you containerize the app:
 
-1- Install python dependencies from requirements.txt: 
+1- Install python dependencies from requirements.txt:
 
 ```sh
  pip install -r requirements.txt
@@ -172,6 +172,7 @@ kubectl edit -n kube-system configmap/aws-auth
 ```
 
 it will open the difault editor. add this section
+
 ```sh
     - groups:
       - system:masters
@@ -181,7 +182,7 @@ it will open the difault editor. add this section
 
 > The final result of config map by running the first command (`kubectl get -n kube-system configmap/aws-auth -o yaml`) should be
 
-```sh 
+```sh
 apiVersion: v1
 data:
   mapRoles: |
@@ -210,3 +211,15 @@ metadata:
 
 - [x]  I have created an EKS cluster named `simple-jwt-api` using `eksctl`
 - [x] I flollowed instructions to create an IAM role for CodeBuild to interact with EKS.
+
+### 3.2 Deployment to Kubernetes using CodePipeline and CodeBuild
+
+You should now be ready to deploy your application using CodePipeline and CodeBuild.
+
+#### Create the Pipeline
+
+You will now create a pipeline which watches your Github. When changes are checked in, it will build a new image and deploy it to your cluster.
+
+1. Generate a GitHub access token. A Github acces token will allow CodePipeline to monitor when a repo is changed. A token can be generated [here](https://github.com/settings/tokens/). You should generate the token with full control of private repositories, as shown in the image below. Be sure to save the token somewhere that is secure.
+
+<!-- ![Drag Racing](Dragster.jpg) -->
