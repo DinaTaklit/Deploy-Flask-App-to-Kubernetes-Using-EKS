@@ -66,9 +66,19 @@ The next step of the project will be:
 
 #### 3.1.1 Set Up an IAM Role for the Cluster
 
+> Skip this step 3.1.1 until You finish the creation of the IAM User in the step 3.1.2.1
+
+Create a Kubernetes (EKS) Cluster `simple-jwt-api`
+
+```sh
+eksctl create cluster --name simple-jwt-api
+```
+
+#### 3.1.2 Set Up an IAM Role for the Cluster
+
 The next steps are provided to quickly set up an IAM role for your cluster.
 
-2. Create an IAM role that CodeBuild can use to interact with EKS
+1. Create an IAM role that CodeBuild can use to interact with EKS
 
 - Set an environment variable ACCOUNT_ID to the value of your AWS account id. You can do this with awscli:
   
