@@ -135,6 +135,12 @@ ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 - Create a role named 'UdacityFlaskDeployCBKubectlRole' using the role policy document
 
 ```sh
+  aws iam create-role --role-name UdacityFlaskDeployCBKubectlRole --assume-role-policy-document "$TRUST" --output text --query 'Role.Arn'
+```
+
+- Create a role policy document that also allows the actions "eks:Describe*" and "ssm:GetParameters". You can create the document in your tmp directory:
+
+```sh
 EKS_DESCRIBE="{ \"Version\": \"2012-10-17\", \"Statement\": [ { \"Effect\": \"Allow\", \"Action\": [ \"eks:Describe*\", \"ssm:GetParameters*\" ], \"Resource\": \"*\" } ] }"
 ```
 
