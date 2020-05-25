@@ -60,6 +60,24 @@ The next step of the project will be:
 - Create a pipeline watching for commits to your Github repository
 - Build and deploy your image using CodeBuild
 
+### 3.0 Configure AWS
+
+- Add the black values => Access Key ID(if does not exsit), Access Key, and region(`us-west-2`)
+
+```sh
+aws configure --profile default
+```
+
+- The final result should be something like this
+
+```sh
+$ aws configure
+AWS Access Key ID [****************3CJ3]:
+AWS Secret Access Key [****************N3Mh]:
+Default region name [us-west-2]:
+Default output format [None]:
+```
+
 ### 3.1 Create an EKS Cluster and IAM Role
 
 > We will start by creating IAM role first. We will create the clusters only once we need them to avoid extra billing.
