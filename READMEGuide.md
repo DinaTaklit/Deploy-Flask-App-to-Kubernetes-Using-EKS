@@ -118,3 +118,61 @@ aws iam put-role-policy --role-name UdacityFlaskDeployCBKubectlRole --policy-nam
 ```
 
 => You have now created a role named 'UdacityFlaskDeployCBKubectlRole'
+
+> Now create the cluster in the step 3.1.1 to finish up the process.
+>
+> We do this to save time especially if you may stack in the commads above every hour of use of cluster is costy. So we may save some money by doing the above steps first.
+
+2. Grant the role access to the cluster. The 'aws-auth ConfigMap' is used to grant role based access control to your cluster.
+
+- You can check the  current configmap by typing
+
+```sh
+kubectl get -n kube-system configmap/aws-auth -o yaml
+```
+
+- In the data/mapRoles section of this document add, replacing <ACCOUNT_ID> with your account id:
+
+```sh
+kubectl edit -n kube-system configmap/aws-auth
+```
+
+it will open the difault editor. add this section
+```sh
+    - groups:
+      - system:masters
+      rolearn: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/UdacityFlaskDeployCBKubectlRole
+      username: build
+```
+
+> The final result of config map by running the first command (`kubectl get -n kube-system configmap/aws-auth -o yaml`) should be
+
+```sh 
+apiVersion: v1
+data:
+  mapRoles: |
+    - groups:
+      - system:bootstrappers
+      - system:nodes
+      rolearn: arn:aws:iam::xxxxxxxxxxxx:role/eksctl-simple-jwt-api-nodegroup-n-NodeInstanceRole-TWAYO7ZHCGYY
+      username: system:node:{{EC2PrivateDNSName}}
+    - groups:
+      - system:masters
+      rolearn: arn:aws:iam::xxxxxxxxxxxx:role/UdacityFlaskDeployCBKubectlRole
+      username: build
+  mapUsers: |
+    []
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2020-05-16T20:48:47Z"
+  name: aws-auth
+  namespace: kube-system
+  resourceVersion: "5644"
+  selfLink: /api/v1/namespaces/kube-system/configmaps/aws-auth
+  uid: 6e3fbd9f-d8e9-4d7f-a3a0-eadd881c44a2
+```
+
+### Concept Checklist
+
+- [x]  I have created an EKS cluster named `simple-jwt-api` using `eksctl`
+- [x] I flollowed instructions to create an IAM role for CodeBuild to interact with EKS.
