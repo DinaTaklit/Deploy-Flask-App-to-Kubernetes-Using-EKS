@@ -92,6 +92,22 @@ Create a Kubernetes (EKS) Cluster `simple-jwt-api`
 eksctl create cluster --name simple-jwt-api
 ```
 
+- Check the creation of the cluster by running the under command or by looking for "create_complete" in your **CloudFormation** dashboard in the stacks)
+  
+```sh
+kubectl get nodes
+```
+
+>Note: To clean up clusters when you're done using them (don't use EKS console because you could delete the EKS cluster but would leave dangling resources that bill you quickly)
+>
+> Instead, to delete cluster and all resources, delete using:
+>
+```sh
+ eksctl delete cluster simple-jwt-api
+```
+>
+> Or delete in **CloudFormation** (delete button)
+
 #### 3.1.2 Set Up an IAM Role for the Cluster
 
 The next steps are provided to quickly set up an IAM role for your cluster.
